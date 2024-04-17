@@ -1,4 +1,5 @@
 # program to add 2 hardcoded numbers
+# assemble using "basm.py examples/add.basm add.bin"
 
 ldi r1, 34
 ldi r2, 35

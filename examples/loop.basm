@@ -1,16 +1,19 @@
 # program that multiplies r1 and r2 to demonstrate labels and jumps
+# assemble using "basm.py examples/loop.basm loop.bin"
 
 ldi r1, 3
 ldi r2, 10
 
 ldi r3, 0
-my_label:
+loop_start:
     # using this piece of code, we loop r1 times
     cmp r1, r0
     brh eq, loop_end
     dec r1
 
     add r3, r3, r2
+
+    jmp loop_start
 
 loop_end:
 
