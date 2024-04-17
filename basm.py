@@ -311,6 +311,7 @@ def assemble_file(_input_path: str, _output_path: str, debug: bool) -> None:
 
     if debug:
         debug_info["source"] = source
+        debug_info["source_path"] = input_path
 
         with open(f"{output_path}.dbg", "w") as f:
             json.dump(debug_info, f, indent=4)
