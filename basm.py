@@ -104,9 +104,16 @@ def assemble_condition(cond: str) -> int:
         exit(1)
 
 def assemble_offset(offset: str) -> int:
-    # sign extended [-32, 31]
     try:
-        offset_int = int(offset)
+        base = 10
+        if "0x" in offset:
+            base = 16
+            offset = offset.replace("0x", "")
+        elif "0b" in offset:
+            base = 2
+            offset = offset.replace("0b", "")
+
+        offset_int = int(offset, base=base)
     except ValueError:
         print(f"{input_path}:{line_number}: expected offset, got {offset!r}")
         exit(1)
@@ -119,7 +126,15 @@ def assemble_offset(offset: str) -> int:
 
 def assemble_address(addr: str) -> int:
     try:
-        addr_int = int(addr)
+        base = 10
+        if "0x" in addr:
+            base = 16
+            addr = addr.replace("0x", "")
+        elif "0b" in addr:
+            base = 2
+            addr = addr.replace("0b", "")
+
+        addr_int = int(addr, base=base)
     except ValueError:
         if addr not in labels:
             print(f"{input_path}:{line_number}: unknown label or invalid integer address {addr!r}")
@@ -138,7 +153,15 @@ def assemble_immediate(imm: str, port: bool = False) -> int:
         expected = "port"
 
     try:
-        imm_int = int(imm)
+        base = 10
+        if "0x" in imm:
+            base = 16
+            imm = imm.replace("0x", "")
+        elif "0b" in imm:
+            base = 2
+            imm = imm.replace("0b", "")
+
+        imm_int = int(imm, base=base)
     except ValueError:
         print(f"{input_path}:{line_number}: expected {expected}, got {imm!r}")
         exit(1)
