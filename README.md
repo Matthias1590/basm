@@ -15,6 +15,10 @@ python basm.py -d input.basm output.bin
 
 # Debugger
 
+> **NOTE**: The debugger uses the curses library. To run the debugger on windows, install windows-curses by running `pip install windows-curses`.
+
+<br>
+
 To debug an assembled program, use the following command (make sure you assembled the program with the -d flag enabled):
 ```shell
 python bdbg.py output.bin
