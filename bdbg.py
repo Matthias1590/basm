@@ -70,8 +70,10 @@ class Emulator:
         elif opcode == 0b0101:  # ret
             self.pc = self.stack.pop()
         elif opcode == 0b0110:  # pld
+            self.pc += 1
             return "port io is not implemented yet"
         elif opcode == 0b0111:  # pst
+            self.pc += 1
             return "port io is not implemented yet"
         elif opcode == 0b1000:  # mld
             self.regs[arg_reg_a].write(self.memory[self.regs[arg_reg_b].get() + arg_offset])
@@ -101,6 +103,7 @@ class Emulator:
         elif opcode == 0b1111:  # rsh
             self.regs[arg_reg_a].write(self.regs[arg_reg_b].get() >> 1 if self.regs[arg_reg_b].get() >= 0 else (self.regs[arg_reg_b].get() + 2**8) >> 1)
         else:
+            self.pc += 1
             return f"unknown opcode {bin(opcode)} at address {hex(self.pc)}"
 
         self.pc += 1
