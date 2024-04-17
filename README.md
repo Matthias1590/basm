@@ -1,6 +1,6 @@
 # basm
 
-Basm is an assembler for one of [Mattbatwings'](https://www.youtube.com/@mattbatwings) Minecraft CPUs.
+Basm is an assembler & debugger for one of [Mattbatwings'](https://www.youtube.com/@mattbatwings) Minecraft CPUs.
 
 # Assembler
 
