@@ -261,7 +261,7 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) != 3:
-        print(f"usage: {sys.argv[0]} input.asm output.bin")
+        print(f"usage: {sys.argv[0]} input.basm output.bin")
         exit(1)
     
     assemble_file(sys.argv[1], sys.argv[2])
