@@ -58,6 +58,48 @@ class Emulator:
                 or (arg_condition == 0b10 and self.carry)
                 or (arg_condition == 0b11 and not self.carry)):
                 self.pc = arg_address - 1
+        elif opcode == 0b0000:  # nop
+            pass
+        elif opcode == 0b0001:  # hlt
+            return "halted"
+        elif opcode == 0b0010:  # jmp
+            self.pc = arg_address - 1
+        elif opcode == 0b0100:  # cal
+            self.stack.append(self.pc)
+            self.pc = arg_address - 1
+        elif opcode == 0b0101:  # ret
+            self.pc = self.stack.pop()
+        elif opcode == 0b0110:  # pld
+            return "port io is not implemented yet"
+        elif opcode == 0b0111:  # pst
+            return "port io is not implemented yet"
+        elif opcode == 0b1000:  # mld
+            self.regs[arg_reg_a].write(self.memory[self.regs[arg_reg_b].get() + arg_offset])
+        elif opcode == 0b1001:  # mst
+            self.memory[self.regs[arg_reg_b].get() + arg_offset] = self.regs[arg_reg_a].get()
+        elif opcode == 0b1011:  # adi
+            self.zero, self.carry = self.regs[arg_reg_a].write(self.regs[arg_reg_a].get() + arg_immediate)
+        elif opcode == 0b1100:  # add
+            self.zero, self.carry = self.regs[arg_reg_a].write(self.regs[arg_reg_b].get() + self.regs[arg_reg_c].get())
+        elif opcode == 0b1110:  # bit
+            if arg_operation == 0b000:  # or
+                self.zero, self.carry = self.regs[arg_reg_a].write(self.regs[arg_reg_b].get() | self.regs[arg_reg_c].get())
+            elif arg_operation == 0b001:  # and
+                self.zero, self.carry = self.regs[arg_reg_a].write(self.regs[arg_reg_b].get() & self.regs[arg_reg_c].get())
+            elif arg_operation == 0b010:  # xor
+                self.zero, self.carry = self.regs[arg_reg_a].write(self.regs[arg_reg_b].get() ^ self.regs[arg_reg_c].get())
+            elif arg_operation == 0b011:  # implies
+                self.zero, self.carry = self.regs[arg_reg_a].write((~self.regs[arg_reg_b].get()) | self.regs[arg_reg_c].get())
+            elif arg_operation == 0b100:  # nor
+                self.zero, self.carry = self.regs[arg_reg_a].write(~(self.regs[arg_reg_b].get() | self.regs[arg_reg_c].get()))
+            elif arg_operation == 0b101:  # nand
+                self.zero, self.carry = self.regs[arg_reg_a].write(~(self.regs[arg_reg_b].get() & self.regs[arg_reg_c].get()))
+            elif arg_operation == 0b110:  # xnor
+                self.zero, self.carry = self.regs[arg_reg_a].write(~(self.regs[arg_reg_b].get() ^ self.regs[arg_reg_c].get()))
+            elif arg_operation == 0b111:  # nimplies
+                self.zero, self.carry = self.regs[arg_reg_a].write(self.regs[arg_reg_b].get() & (~self.regs[arg_reg_c].get()))
+        elif opcode == 0b1111:  # rsh
+            self.regs[arg_reg_a].write(self.regs[arg_reg_b].get() >> 1 if self.regs[arg_reg_b].get() >= 0 else (self.regs[arg_reg_b].get() + 2**8) >> 1)
         else:
             return f"unknown opcode {bin(opcode)} at address {hex(self.pc)}"
 
@@ -69,7 +111,7 @@ class Register:
         self.value = 0
 
     def write(self, value: int) -> tuple[bool, bool]:
-        self.value = value
+        self.value = value & 0xff
         return self.value == 0, self.value < 0
 
     def get(self) -> int:
@@ -161,7 +203,6 @@ def debug_loop(stdscr, machine_code: bytes, debug_info: dict) -> None:
 
         registers_win.addstr(0, 1, "  registers & flags".ljust(registers_win.getmaxyx()[1] - 1), curses.color_pair(1))
         for i in range(2):
-            # r0: value / 2s complement
             offset = 1
             for j in range(4):
                 index = i * 4 + j
