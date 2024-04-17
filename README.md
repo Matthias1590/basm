@@ -4,7 +4,7 @@ Basm is an assembler & debugger for one of [Mattbatwings'](https://www.youtube.c
 
 # Assembler
 
-To compile an assembly program, use the following command:
+To assemble a program, use the following command:
 ```shell
 python basm.py input.basm output.bin
 ```
@@ -15,7 +15,7 @@ python basm.py -d input.basm output.bin
 
 # Debugger
 
-To debug a program, use the following command:
+To debug an assembled program, use the following command (make sure you assembled the program with the -d flag enabled):
 ```shell
 python bdbg.py output.bin
 ```
