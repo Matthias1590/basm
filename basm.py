@@ -27,7 +27,7 @@ def assemble(opcode: str, args: list[str]) -> int:
     elif opcode == "mst":
         return 0b1001 << 12 | assemble_reg(args[0]) << 9 | assemble_reg(args[1]) << 6 | assemble_offset(args[2])
     elif opcode == "adi":
-        return 0b1011 << 12 | assemble_reg(args[0]) << 9 | assemble_reg(args[1]) << 6 | assemble_immediate(args[2])
+        return 0b1011 << 12 | assemble_reg(args[0]) << 9 | assemble_immediate(args[1])
     elif opcode == "add":
         return 0b1100 << 12 | assemble_reg(args[0]) << 9 | assemble_reg(args[1]) << 6 | assemble_reg(args[2])
     elif opcode == "sub":
