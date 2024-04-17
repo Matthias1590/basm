@@ -1,0 +1,7 @@
+# program to add 2 hardcoded numbers
+
+ldi r1, 34
+ldi r2, 35
+add r3, r1, r2
+
+hlt
